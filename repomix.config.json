@@ -1,0 +1,71 @@
+{
+  "$schema": "https://repomix.com/repomix-config.schema.json",
+  "output": {
+    "filePath": "drive-cafeteria-back.xml",
+    "style": "xml",
+    "parsable": true,
+    "topFilesLength": 20,
+    "showLineNumbers": false,
+    "removeComments": false,
+    "removeEmptyLines": false
+  },
+  "include": [
+    "src/**/*",
+    "app/**/*",
+    "components/**/*",
+    "pages/**/*",
+    "styles/**/*",
+    "hooks/**/*",
+    "utils/**/*",
+    "types/**/*",
+    "context/**/*",
+    "package.json",
+    "tsconfig.json",
+    "next.config.js",
+    "next.config.mjs",
+    "tailwind.config.js",
+    "tailwind.config.ts"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "dist/**",
+      ".pnpm-store/**",
+      "pnpm-lock.yaml",
+      "package-lock.json",
+      "yarn.lock",
+      ".env*",
+      "!.env.example",
+      "**/*.log",
+      "coverage/**",
+      ".jest/**",
+      "**/*.spec.ts",
+      "**/*.test.ts",
+      "**/*.spec.tsx",
+      "**/*.test.tsx",
+      "public/**",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.svg",
+      "**/*.gif",
+      "**/*.ico",
+      "**/*.webp",
+      "**/*.woff",
+      "**/*.woff2",
+      "**/*.eot",
+      "**/*.ttf",
+      ".vscode/**",
+      ".idea/**",
+      ".git/**"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

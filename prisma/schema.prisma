@@ -1,0 +1,122 @@
+// prisma/schema.prisma
+// DRIVE — Café & Lubricentro
+// Copiá este archivo completo en prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────
+//  USUARIOS & AUTH
+// ─────────────────────────────────────────
+
+enum Rol {
+  ADMIN
+  MOZO
+  BARISTA
+  LUBRICENTRO
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  nombre    String
+  rol       Rol      @default(MOZO)
+  activo    Boolean  @default(true)
+  creadoEn  DateTime @default(now()) @map("creado_en")
+  pedidos   Pedido[]
+
+  @@map("usuarios")
+}
+
+// ─────────────────────────────────────────
+//  CAFETERÍA — CATÁLOGO
+// ─────────────────────────────────────────
+
+model Categoria {
+  id     String        @id @default(cuid())
+  nombre String
+  emoji  String?
+  orden  Int           @default(0)
+  activo Boolean       @default(true)
+  items  ItemCatalogo[]
+
+  @@map("categorias")
+}
+
+model ItemCatalogo {
+  id          String      @id @default(cuid())
+  nombre      String
+  emoji       String?
+  descripcion String?
+  precio      Float
+  activo      Boolean     @default(true)
+  categoriaId String      @map("categoria_id")
+  categoria   Categoria   @relation(fields: [categoriaId], references: [id])
+  pedidoItems ItemPedido[]
+
+  @@map("items_catalogo")
+}
+
+// ─────────────────────────────────────────
+//  CAFETERÍA — MESAS & PEDIDOS
+// ─────────────────────────────────────────
+
+enum TipoMesa {
+  MESA
+  BARRA
+}
+
+model Mesa {
+  id      String    @id @default(cuid())
+  label   String
+  numero  Int
+  tipo    TipoMesa  @default(MESA)
+  activo  Boolean   @default(true)
+  pedidos Pedido[]
+
+  @@map("mesas")
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  EN_PREPARACION
+  LISTO
+  ENTREGADO
+  CERRADO
+}
+
+model Pedido {
+  id         String       @id @default(cuid())
+  numero     Int
+  estado     EstadoPedido @default(PENDIENTE)
+  total      Float
+  creadoEn   DateTime     @default(now()) @map("creado_en")
+  cerradoEn  DateTime?    @map("cerrado_en")
+  mesaId     String       @map("mesa_id")
+  usuarioId  String       @map("usuario_id")
+  mesa       Mesa         @relation(fields: [mesaId], references: [id])
+  usuario    Usuario      @relation(fields: [usuarioId], references: [id])
+  items      ItemPedido[]
+
+  @@map("pedidos")
+}
+
+model ItemPedido {
+  id        String       @id @default(cuid())
+  cantidad  Int
+  precioUnit Float       @map("precio_unit")
+  subtotal  Float
+  pedidoId  String       @map("pedido_id")
+  itemId    String       @map("item_id")
+  pedido    Pedido       @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  item      ItemCatalogo @relation(fields: [itemId], references: [id])
+
+  @@map("items_pedido")
+}

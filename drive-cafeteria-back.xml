@@ -1,0 +1,1119 @@
+This file is a merged representation of a subset of the codebase, containing specifically included files and files not matching ignore patterns, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Only files matching these patterns are included: src/**/*, app/**/*, components/**/*, pages/**/*, styles/**/*, hooks/**/*, utils/**/*, types/**/*, context/**/*, package.json, tsconfig.json, next.config.js, next.config.mjs, tailwind.config.js, tailwind.config.ts
+- Files matching these patterns are excluded: node_modules/**, .next/**, out/**, build/**, dist/**, .pnpm-store/**, pnpm-lock.yaml, package-lock.json, yarn.lock, .env*, !.env.example, **/*.log, coverage/**, .jest/**, **/*.spec.ts, **/*.test.ts, **/*.spec.tsx, **/*.test.tsx, public/**, **/*.png, **/*.jpg, **/*.jpeg, **/*.svg, **/*.gif, **/*.ico, **/*.webp, **/*.woff, **/*.woff2, **/*.eot, **/*.ttf, .vscode/**, .idea/**, .git/**
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+package.json
+src/app.controller.ts
+src/app.module.ts
+src/app.service.ts
+src/auth/auth.controller.ts
+src/auth/auth.module.ts
+src/auth/auth.service.ts
+src/auth/dto/login.dto.ts
+src/auth/guards/jwt-auth.guard.ts
+src/auth/guards/local-auth.guard.ts
+src/auth/strategies/jwt.strategy.ts
+src/auth/strategies/local.strategy.ts
+src/cafeteria/catalogo/catalogo.controller.ts
+src/cafeteria/catalogo/catalogo.module.ts
+src/cafeteria/catalogo/catalogo.service.ts
+src/cafeteria/catalogo/dto/create-item.dto.ts
+src/cafeteria/categorias/categorias.controller.ts
+src/cafeteria/categorias/categorias.module.ts
+src/cafeteria/categorias/categorias.service.ts
+src/cafeteria/categorias/dto/create-categoria.dto.ts
+src/cafeteria/mesas/mesas.controller.ts
+src/cafeteria/mesas/mesas.module.ts
+src/cafeteria/mesas/mesas.service.ts
+src/cafeteria/pedidos/dto/create-pedido.dto.ts
+src/cafeteria/pedidos/pedidos.controller.ts
+src/cafeteria/pedidos/pedidos.module.ts
+src/cafeteria/pedidos/pedidos.service.ts
+src/main.ts
+src/prisma/prisma.module.ts
+src/prisma/prisma.service.ts
+src/usuarios/dto/create-usuario.dto.ts
+src/usuarios/usuarios.controller.ts
+src/usuarios/usuarios.module.ts
+src/usuarios/usuarios.service.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="package.json">
+{
+  "name": "drive-cafeteria-back",
+  "version": "1.0.0",
+  "description": "DRIVE Café & Lubricentro — Backend API",
+  "author": "DRIVE",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.3",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.1.3",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.21.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.28.0",
+    "@nestjs/cli": "^11.0.7",
+    "@nestjs/schematics": "^11.0.5",
+    "@nestjs/testing": "^11.1.3",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.15.30",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.20.0",
+    "@types/supertest": "^6.0.2",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.2.0",
+    "jest": "^30.0.0",
+    "prettier": "^3.5.3",
+    "prisma": "^6.19.3",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.4.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}
+</file>
+
+<file path="src/app.controller.ts">
+import { Controller, Get } from '@nestjs/common';
+
+@Controller()
+export class AppController {
+  @Get('health')
+  health() {
+    return { status: 'ok', app: 'DRIVE Backend' };
+  }
+}
+</file>
+
+<file path="src/app.module.ts">
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { CategoriasModule } from './cafeteria/categorias/categorias.module';
+import { CatalogoModule } from './cafeteria/catalogo/catalogo.module';
+import { MesasModule } from './cafeteria/mesas/mesas.module';
+import { PedidosModule } from './cafeteria/pedidos/pedidos.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    AuthModule,
+    UsuariosModule,
+    CategoriasModule,
+    CatalogoModule,
+    MesasModule,
+    PedidosModule,
+  ],
+})
+export class AppModule {}
+</file>
+
+<file path="src/app.service.ts">
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AppService {}
+</file>
+
+<file path="src/auth/auth.controller.ts">
+import { Controller, Post, Get, Body, UseGuards, Request } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LoginDto } from './dto/login.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Request() req: any, @Body() _dto: LoginDto) {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getProfile(@Request() req: any) {
+    return this.authService.getProfile(req.user.sub);
+  }
+}
+</file>
+
+<file path="src/auth/auth.module.ts">
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
+import { UsuariosModule } from '../usuarios/usuarios.module';
+
+@Module({
+  imports: [
+    UsuariosModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => {
+        const secret = config.get<string>('JWT_SECRET');
+        if (!secret) throw new Error('JWT_SECRET no definido en .env');
+        return {
+          secret,
+          signOptions: { expiresIn: '7d' as const },
+        };
+      },
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [AuthService, JwtStrategy, LocalStrategy],
+  controllers: [AuthController],
+  exports: [AuthService],
+})
+export class AuthModule {}
+</file>
+
+<file path="src/auth/auth.service.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UsuariosService } from '../usuarios/usuarios.service';
+import * as bcrypt from 'bcryptjs'
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly usuariosService: UsuariosService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async validateUser(email: string, password: string) {
+    const usuario = await this.usuariosService.findByEmail(email);
+    if (!usuario) throw new UnauthorizedException('Credenciales inválidas');
+    if (!usuario.activo) throw new UnauthorizedException('Usuario inactivo');
+
+    const passwordOk = await bcrypt.compare(password, usuario.password);
+    if (!passwordOk) throw new UnauthorizedException('Credenciales inválidas');
+
+    const { password: _p, ...result } = usuario;
+    return result;
+  }
+
+  async login(usuario: any) {
+    const payload = { sub: usuario.id, email: usuario.email, rol: usuario.rol };
+    return {
+      access_token: this.jwtService.sign(payload),
+      usuario: {
+        id: usuario.id,
+        email: usuario.email,
+        nombre: usuario.nombre,
+        rol: usuario.rol,
+      },
+    };
+  }
+
+  async getProfile(userId: string) {
+    const usuario = await this.usuariosService.findById(userId);
+    if (!usuario) throw new UnauthorizedException();
+    const { password: _p, ...result } = usuario;
+    return result;
+  }
+}
+</file>
+
+<file path="src/auth/dto/login.dto.ts">
+import { IsEmail, IsString, MinLength } from 'class-validator';
+
+export class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
+</file>
+
+<file path="src/auth/guards/jwt-auth.guard.ts">
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
+</file>
+
+<file path="src/auth/guards/local-auth.guard.ts">
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class LocalAuthGuard extends AuthGuard('local') {}
+</file>
+
+<file path="src/auth/strategies/jwt.strategy.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(config: ConfigService) {
+    const secret = config.get<string>('JWT_SECRET');
+    if (!secret) throw new Error('JWT_SECRET no definido en .env');
+
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: secret,
+    });
+  }
+
+  async validate(payload: any) {
+    if (!payload.sub) throw new UnauthorizedException();
+    return { sub: payload.sub, email: payload.email, rol: payload.rol };
+  }
+}
+</file>
+
+<file path="src/auth/strategies/local.strategy.ts">
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
+import { AuthService } from '../auth.service';
+
+@Injectable()
+export class LocalStrategy extends PassportStrategy(Strategy) {
+  constructor(private authService: AuthService) {
+    super({ usernameField: 'email' });
+  }
+
+  async validate(email: string, password: string) {
+    const user = await this.authService.validateUser(email, password);
+    if (!user) throw new UnauthorizedException();
+    return user;
+  }
+}
+</file>
+
+<file path="src/cafeteria/catalogo/catalogo.controller.ts">
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { CatalogoService } from './catalogo.service';
+import { CreateItemDto } from './dto/create-item.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+
+@Controller('cafeteria/catalogo')
+export class CatalogoController {
+  constructor(private readonly catalogoService: CatalogoService) {}
+
+  @Get()
+  findAll(@Query('categoriaId') categoriaId?: string) {
+    return this.catalogoService.findAll(categoriaId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.catalogoService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  create(@Body() dto: CreateItemDto) {
+    return this.catalogoService.create(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() dto: CreateItemDto) {
+    return this.catalogoService.update(id, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.catalogoService.remove(id);
+  }
+}
+</file>
+
+<file path="src/cafeteria/catalogo/catalogo.module.ts">
+import { Module } from '@nestjs/common';
+import { CatalogoService } from './catalogo.service';
+import { CatalogoController } from './catalogo.controller';
+
+@Module({
+  providers: [CatalogoService],
+  controllers: [CatalogoController],
+})
+export class CatalogoModule {}
+</file>
+
+<file path="src/cafeteria/catalogo/catalogo.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateItemDto } from './dto/create-item.dto';
+
+@Injectable()
+export class CatalogoService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll(categoriaId?: string) {
+    return this.prisma.itemCatalogo.findMany({
+      where: {
+        activo: true,
+        ...(categoriaId ? { categoriaId } : {}),
+      },
+      include: { categoria: true },
+      orderBy: [{ categoria: { orden: 'asc' } }, { nombre: 'asc' }],
+    });
+  }
+
+  async findOne(id: string) {
+    const item = await this.prisma.itemCatalogo.findUnique({
+      where: { id },
+      include: { categoria: true },
+    });
+    if (!item) throw new NotFoundException('Item no encontrado');
+    return item;
+  }
+
+  create(dto: CreateItemDto) {
+    return this.prisma.itemCatalogo.create({
+      data: dto,
+      include: { categoria: true },
+    });
+  }
+
+  async update(id: string, dto: Partial<CreateItemDto>) {
+    await this.findOne(id);
+    return this.prisma.itemCatalogo.update({
+      where: { id },
+      data: dto,
+      include: { categoria: true },
+    });
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+    return this.prisma.itemCatalogo.update({ where: { id }, data: { activo: false } });
+  }
+}
+</file>
+
+<file path="src/cafeteria/catalogo/dto/create-item.dto.ts">
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+
+export class CreateItemDto {
+  @IsString()
+  nombre: string;
+
+  @IsString()
+  @IsOptional()
+  emoji?: string;
+
+  @IsNumber()
+  precio: number;
+
+  @IsString()
+  categoriaId: string;
+
+  @IsBoolean()
+  @IsOptional()
+  activo?: boolean;
+
+  @IsString()
+  @IsOptional()
+  descripcion?: string;
+}
+</file>
+
+<file path="src/cafeteria/categorias/categorias.controller.ts">
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { CategoriasService } from './categorias.service';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+
+@Controller('cafeteria/categorias')
+export class CategoriasController {
+  constructor(private readonly categoriasService: CategoriasService) {}
+
+  @Get()
+  findAll() {
+    return this.categoriasService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  create(@Body() dto: CreateCategoriaDto) {
+    return this.categoriasService.create(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() dto: CreateCategoriaDto) {
+    return this.categoriasService.update(id, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.categoriasService.remove(id);
+  }
+}
+</file>
+
+<file path="src/cafeteria/categorias/categorias.module.ts">
+import { Module } from '@nestjs/common';
+import { CategoriasService } from './categorias.service';
+import { CategoriasController } from './categorias.controller';
+
+@Module({
+  providers: [CategoriasService],
+  controllers: [CategoriasController],
+  exports: [CategoriasService],
+})
+export class CategoriasModule {}
+</file>
+
+<file path="src/cafeteria/categorias/categorias.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateCategoriaDto } from './dto/create-categoria.dto';
+
+@Injectable()
+export class CategoriasService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll() {
+    return this.prisma.categoria.findMany({
+      where: { activo: true },
+      orderBy: { orden: 'asc' },
+      include: { _count: { select: { items: true } } },
+    });
+  }
+
+  async findOne(id: string) {
+    const cat = await this.prisma.categoria.findUnique({ where: { id } });
+    if (!cat) throw new NotFoundException('Categoría no encontrada');
+    return cat;
+  }
+
+  create(dto: CreateCategoriaDto) {
+    return this.prisma.categoria.create({ data: dto });
+  }
+
+  async update(id: string, dto: Partial<CreateCategoriaDto>) {
+    await this.findOne(id);
+    return this.prisma.categoria.update({ where: { id }, data: dto });
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+    return this.prisma.categoria.update({ where: { id }, data: { activo: false } });
+  }
+}
+</file>
+
+<file path="src/cafeteria/categorias/dto/create-categoria.dto.ts">
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+
+export class CreateCategoriaDto {
+  @IsString()
+  nombre: string;
+
+  @IsString()
+  @IsOptional()
+  emoji?: string;
+
+  @IsNumber()
+  @IsOptional()
+  orden?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  activo?: boolean;
+}
+</file>
+
+<file path="src/cafeteria/mesas/mesas.controller.ts">
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { MesasService } from './mesas.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+
+@UseGuards(JwtAuthGuard)
+@Controller('cafeteria/mesas')
+export class MesasController {
+  constructor(private readonly mesasService: MesasService) {}
+
+  @Get()
+  findAll() {
+    return this.mesasService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.mesasService.findOne(id);
+  }
+}
+</file>
+
+<file path="src/cafeteria/mesas/mesas.module.ts">
+import { Module } from '@nestjs/common';
+import { MesasService } from './mesas.service';
+import { MesasController } from './mesas.controller';
+
+@Module({
+  providers: [MesasService],
+  controllers: [MesasController],
+})
+export class MesasModule {}
+</file>
+
+<file path="src/cafeteria/mesas/mesas.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+
+@Injectable()
+export class MesasService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll() {
+    return this.prisma.mesa.findMany({
+      where: { activo: true },
+      orderBy: [{ tipo: 'asc' }, { numero: 'asc' }],
+      include: {
+        pedidos: {
+          where: { estado: { not: 'CERRADO' } },
+          select: { id: true, estado: true, total: true, numero: true },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const mesa = await this.prisma.mesa.findUnique({
+      where: { id },
+      include: {
+        pedidos: {
+          where: { estado: { not: 'CERRADO' } },
+          include: { items: { include: { item: true } } },
+        },
+      },
+    });
+    if (!mesa) throw new NotFoundException('Mesa no encontrada');
+    return mesa;
+  }
+}
+</file>
+
+<file path="src/cafeteria/pedidos/dto/create-pedido.dto.ts">
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsString, Min, ValidateNested } from 'class-validator';
+
+class ItemPedidoDto {
+  @IsString()
+  itemId: string;
+
+  @IsNumber()
+  @Min(1)
+  cantidad: number;
+}
+
+export class CreatePedidoDto {
+  @IsString()
+  mesaId: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ItemPedidoDto)
+  items: ItemPedidoDto[];
+}
+</file>
+
+<file path="src/cafeteria/pedidos/pedidos.controller.ts">
+import { Controller, Get, Post, Patch, Param, Body, Query, UseGuards, Request } from '@nestjs/common';
+import { PedidosService } from './pedidos.service';
+import { CreatePedidoDto } from './dto/create-pedido.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+
+@UseGuards(JwtAuthGuard)
+@Controller('cafeteria/pedidos')
+export class PedidosController {
+  constructor(private readonly pedidosService: PedidosService) {}
+
+  @Get()
+  findAll(@Query('estado') estado?: string) {
+    return this.pedidosService.findAll(estado);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.pedidosService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() dto: CreatePedidoDto, @Request() req: any) {
+    return this.pedidosService.create(dto, req.user.sub);
+  }
+
+  @Patch(':id/avanzar')
+  avanzarEstado(@Param('id') id: string) {
+    return this.pedidosService.avanzarEstado(id);
+  }
+
+  @Patch(':id/cerrar')
+  cerrar(@Param('id') id: string) {
+    return this.pedidosService.cerrar(id);
+  }
+}
+</file>
+
+<file path="src/cafeteria/pedidos/pedidos.module.ts">
+import { Module } from '@nestjs/common';
+import { PedidosService } from './pedidos.service';
+import { PedidosController } from './pedidos.controller';
+
+@Module({
+  providers: [PedidosService],
+  controllers: [PedidosController],
+})
+export class PedidosModule {}
+</file>
+
+<file path="src/cafeteria/pedidos/pedidos.service.ts">
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreatePedidoDto } from './dto/create-pedido.dto';
+import { EstadoPedido } from '@prisma/client';
+
+const FLUJO_ESTADOS: Record<string, EstadoPedido> = {
+  PENDIENTE:      'EN_PREPARACION',
+  EN_PREPARACION: 'LISTO',
+  LISTO:          'ENTREGADO',
+};
+
+@Injectable()
+export class PedidosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll(estado?: string) {
+    return this.prisma.pedido.findMany({
+      where: {
+        ...(estado ? { estado: estado as EstadoPedido } : { estado: { not: 'CERRADO' } }),
+      },
+      include: {
+        mesa: true,
+        items: { include: { item: true } },
+        usuario: { select: { id: true, nombre: true } },
+      },
+      orderBy: { creadoEn: 'desc' },
+    });
+  }
+
+  async findOne(id: string) {
+    const pedido = await this.prisma.pedido.findUnique({
+      where: { id },
+      include: {
+        mesa: true,
+        items: { include: { item: true } },
+        usuario: { select: { id: true, nombre: true } },
+      },
+    });
+    if (!pedido) throw new NotFoundException('Pedido no encontrado');
+    return pedido;
+  }
+
+  async create(dto: CreatePedidoDto, usuarioId: string) {
+    const itemsIds = dto.items.map((i) => i.itemId);
+    const itemsCatalogo = await this.prisma.itemCatalogo.findMany({
+      where: { id: { in: itemsIds }, activo: true },
+    });
+
+    if (itemsCatalogo.length !== itemsIds.length) {
+      throw new BadRequestException('Uno o más items no existen o están inactivos');
+    }
+
+    const total = dto.items.reduce((acc, curr) => {
+      const item = itemsCatalogo.find((i) => i.id === curr.itemId)!;
+      return acc + item.precio * curr.cantidad;
+    }, 0);
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const count = await this.prisma.pedido.count({ where: { creadoEn: { gte: hoy } } });
+
+    return this.prisma.pedido.create({
+      data: {
+        numero: count + 1,
+        mesaId: dto.mesaId,
+        usuarioId,
+        total,
+        items: {
+          create: dto.items.map((i) => {
+            const item = itemsCatalogo.find((c) => c.id === i.itemId)!;
+            return {
+              itemId: i.itemId,
+              cantidad: i.cantidad,
+              precioUnit: item.precio,
+              subtotal: item.precio * i.cantidad,
+            };
+          }),
+        },
+      },
+      include: { mesa: true, items: { include: { item: true } } },
+    });
+  }
+
+  async avanzarEstado(id: string) {
+    const pedido = await this.findOne(id);
+    const siguiente = FLUJO_ESTADOS[pedido.estado];
+    if (!siguiente) throw new BadRequestException(`No se puede avanzar desde ${pedido.estado}`);
+
+    return this.prisma.pedido.update({
+      where: { id },
+      data: { estado: siguiente },
+      include: { mesa: true, items: { include: { item: true } } },
+    });
+  }
+
+  async cerrar(id: string) {
+    const pedido = await this.findOne(id);
+    if (pedido.estado !== 'ENTREGADO') {
+      throw new BadRequestException('Solo se pueden cerrar pedidos entregados');
+    }
+    return this.prisma.pedido.update({
+      where: { id },
+      data: { estado: 'CERRADO', cerradoEn: new Date() },
+    });
+  }
+}
+</file>
+
+<file path="src/main.ts">
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  app.enableCors({
+    origin: process.env.FRONTEND_URL ?? 'http://localhost:3001',
+    credentials: true,
+  });
+
+  app.setGlobalPrefix('api/v1');
+
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  console.log(`🚀 Drive backend corriendo en http://localhost:${port}/api/v1`);
+}
+bootstrap();
+</file>
+
+<file path="src/prisma/prisma.module.ts">
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+</file>
+
+<file path="src/prisma/prisma.service.ts">
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(PrismaService.name);
+
+  constructor() {
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    const adapter = new PrismaPg(pool);
+
+    super({ adapter });
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+    this.logger.log('Database connected');
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
+  }
+}
+</file>
+
+<file path="src/usuarios/dto/create-usuario.dto.ts">
+import { IsEmail, IsEnum, IsString, MinLength } from 'class-validator';
+
+export enum Rol {
+  ADMIN = 'ADMIN',
+  MOZO = 'MOZO',
+  BARISTA = 'BARISTA',
+  LUBRICENTRO = 'LUBRICENTRO',
+}
+
+export class CreateUsuarioDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+
+  @IsString()
+  nombre: string;
+
+  @IsEnum(Rol)
+  rol: Rol;
+}
+</file>
+
+<file path="src/usuarios/usuarios.controller.ts">
+import { Controller, Get, Post, Patch, Param, Body, UseGuards } from '@nestjs/common';
+import { UsuariosService } from './usuarios.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+
+@UseGuards(JwtAuthGuard)
+@Controller('usuarios')
+export class UsuariosController {
+  constructor(private readonly usuariosService: UsuariosService) {}
+
+  @Get()
+  findAll() {
+    return this.usuariosService.findAll();
+  }
+
+  @Post()
+  create(@Body() dto: CreateUsuarioDto) {
+    return this.usuariosService.create(dto);
+  }
+
+  @Patch(':id/toggle')
+  toggle(@Param('id') id: string) {
+    return this.usuariosService.toggleActivo(id);
+  }
+}
+</file>
+
+<file path="src/usuarios/usuarios.module.ts">
+import { Module } from '@nestjs/common';
+import { UsuariosService } from './usuarios.service';
+import { UsuariosController } from './usuarios.controller';
+
+@Module({
+  providers: [UsuariosService],
+  controllers: [UsuariosController],
+  exports: [UsuariosService],
+})
+export class UsuariosModule {}
+</file>
+
+<file path="src/usuarios/usuarios.service.ts">
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import * as bcrypt from 'bcryptjs'
+
+@Injectable()
+export class UsuariosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findByEmail(email: string) {
+    return this.prisma.usuario.findUnique({ where: { email } });
+  }
+
+  async findById(id: string) {
+    return this.prisma.usuario.findUnique({ where: { id } });
+  }
+
+  async findAll() {
+    return this.prisma.usuario.findMany({
+      select: { id: true, email: true, nombre: true, rol: true, activo: true, creadoEn: true },
+      orderBy: { creadoEn: 'desc' },
+    });
+  }
+
+  async create(dto: CreateUsuarioDto) {
+    const existe = await this.findByEmail(dto.email);
+    if (existe) throw new ConflictException('El email ya está registrado');
+
+    const hash = await bcrypt.hash(dto.password, 12);
+    const usuario = await this.prisma.usuario.create({
+      data: { ...dto, password: hash },
+    });
+    const { password: _p, ...result } = usuario;
+    return result;
+  }
+
+  async toggleActivo(id: string) {
+    const usuario = await this.prisma.usuario.findUnique({ where: { id } });
+    if (!usuario) throw new NotFoundException('Usuario no encontrado');
+    return this.prisma.usuario.update({
+      where: { id },
+      data: { activo: !usuario.activo },
+      select: { id: true, email: true, nombre: true, rol: true, activo: true },
+    });
+  }
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
+}
+</file>
+
+</files>
