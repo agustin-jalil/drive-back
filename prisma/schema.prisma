@@ -94,19 +94,17 @@ enum EstadoPedido {
 }
 
 model Pedido {
-  id         String       @id @default(cuid())
-  numero     Int
-  estado     EstadoPedido @default(PENDIENTE)
-  total      Float
-  creadoEn   DateTime     @default(now()) @map("creado_en")
-  cerradoEn  DateTime?    @map("cerrado_en")
-  mesaId     String       @map("mesa_id")
-  usuarioId  String       @map("usuario_id")
-  mesa       Mesa         @relation(fields: [mesaId], references: [id])
-  usuario    Usuario      @relation(fields: [usuarioId], references: [id])
-  items      ItemPedido[]
-
-  @@map("pedidos")
+  id          String       @id @default(cuid())
+  numero      Int
+  estado      EstadoPedido @default(PENDIENTE)
+  total       Float
+  mesaId      String
+  usuarioId   String
+  creadoEn    DateTime     @default(now())
+  cerradoEn   DateTime?    // <-- DEBE EXISTIR
+  mesa        Mesa         @relation(fields: [mesaId], references: [id])
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+  items       ItemPedido[]
 }
 
 model ItemPedido {

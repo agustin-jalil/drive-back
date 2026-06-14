@@ -1,151 +1,103 @@
-// prisma/seed.ts
-// Copiá este archivo en prisma/seed.ts
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient, TipoMesa, Rol } from '@prisma/client';
+import { Pool } from 'pg';
+import * as bcrypt from 'bcryptjs';
+import * as dotenv from 'dotenv';
 
-import { PrismaClient, Rol, TipoMesa } from '@prisma/client';
-import * as bcrypt from 'bcryptjs'
+dotenv.config();
 
-const prisma = new PrismaClient();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('🌱 Iniciando seed...');
 
-  // ── Usuario Admin ────────────────────────────────────────
-  const hash = await bcrypt.hash('admin@drive.com', 12);
+  // ── Limpiar datos de cafetería ──
+  await prisma.itemPedido.deleteMany();
+  await prisma.pedido.deleteMany();
+  await prisma.itemCatalogo.deleteMany();
+  await prisma.categoria.deleteMany();
 
-  const admin = await prisma.usuario.upsert({
-    where: { email: 'admin@drive.com' },
-    update: {},
-    create: {
-      email: 'admin@drive.com',
-      password: hash,
-      nombre: 'Administrador DRIVE',
-      rol: Rol.ADMIN,
-      activo: true,
-    },
+  // ── Categorías ──
+  const combos = await prisma.categoria.create({
+    data: { nombre: 'Combos', emoji: '🥐', orden: 1, activo: true },
   });
-  console.log(`✓ Usuario admin: ${admin.email}`);
-
-  // ── Usuario Mozo demo ────────────────────────────────────
-  const hashMozo = await bcrypt.hash('mozo1234', 12);
-  await prisma.usuario.upsert({
-    where: { email: 'mozo@drive.com' },
-    update: {},
-    create: {
-      email: 'mozo@drive.com',
-      password: hashMozo,
-      nombre: 'Mozo Demo',
-      rol: Rol.MOZO,
-      activo: true,
-    },
+  const infusiones = await prisma.categoria.create({
+    data: { nombre: 'Infusiones', emoji: '🍵', orden: 2, activo: true },
   });
-  console.log('✓ Usuario mozo: mozo@drive.com / mozo1234');
+  const cafeteria = await prisma.categoria.create({
+    data: { nombre: 'Cafetería', emoji: '☕', orden: 3, activo: true },
+  });
 
-  // ── Categorías ───────────────────────────────────────────
-  const categorias = [
-    { nombre: 'Cafés',      emoji: '☕', orden: 1 },
-    { nombre: 'Infusiones', emoji: '🍵', orden: 2 },
-    { nombre: 'Fríos',      emoji: '🧊', orden: 3 },
-    { nombre: 'Comidas',    emoji: '🥐', orden: 4 },
-    { nombre: 'Postres',    emoji: '🍰', orden: 5 },
-  ];
+  // ── Items: COMBOS ──
+  await prisma.itemCatalogo.createMany({
+    data: [
+      { nombre: 'Combo Tradicional',  emoji: '🥐', descripcion: 'Infusión + dos medialunas o tortillas + jugo de naranja',                                               precio: 6000,  categoriaId: combos.id, activo: true },
+      { nombre: 'Combo Simple',       emoji: '🍞', descripcion: 'Infusión + dos tostadas con mermelada y queso + jugo de naranja',                                       precio: 7000,  categoriaId: combos.id, activo: true },
+      { nombre: 'Avocado Toast',      emoji: '🥑', descripcion: 'Infusión + dos tostadas con palta, huevo revuelto, tomates cherry y mix de semillas + jugo de naranja', precio: 11000, categoriaId: combos.id, activo: true },
+      { nombre: 'Carlitos & Licuado', emoji: '🥪', descripcion: 'Licuado a elección + carlitos de jamón y queso + papas chip',                                           precio: 9000,  categoriaId: combos.id, activo: true },
+    ],
+  });
 
-  const categoriasCreadas: Record<string, string> = {};
+  // ── Items: INFUSIONES ──
+  await prisma.itemCatalogo.createMany({
+    data: [
+      { nombre: 'Té',         emoji: '🍵', descripcion: 'Negro clásico / verde tradicional / tilo / hierbas digestivas',                        precio: 2300, categoriaId: infusiones.id, activo: true },
+      { nombre: 'Mate cocido',emoji: '🧉', descripcion: 'Mate cocido tradicional',                                                               precio: 2300, categoriaId: infusiones.id, activo: true },
+      { nombre: 'Submarino',  emoji: '🍫', descripcion: 'Leche caliente texturizada con una barra de chocolate premium para derretir',           precio: 4500, categoriaId: infusiones.id, activo: true },
+    ],
+  });
 
-  for (const cat of categorias) {
-    const existe = await prisma.categoria.findFirst({ where: { nombre: cat.nombre } });
-    if (!existe) {
-      const c = await prisma.categoria.create({ data: cat });
-      categoriasCreadas[cat.nombre] = c.id;
-      console.log(`  ✓ Categoría: ${cat.emoji} ${cat.nombre}`);
-    } else {
-      categoriasCreadas[cat.nombre] = existe.id;
-      console.log(`  ~ Categoría ya existe: ${cat.nombre}`);
+  // ── Items: CAFETERÍA ──
+  await prisma.itemCatalogo.createMany({
+    data: [
+      { nombre: 'Ristretto',      emoji: '☕', descripcion: 'Shot de espresso corto y concentrado',                                                     precio: 3100, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Espresso',       emoji: '☕', descripcion: 'Clásico shot de café negro y equilibrado',                                                 precio: 3100, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Macchiato',      emoji: '☕', descripcion: 'Espresso clásico con una sutil cucharada de espuma de leche caliente',                     precio: 3300, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Café',           emoji: '☕', descripcion: 'Clásico café negro en una medida intermedia',                                              precio: 3600, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Café doble',     emoji: '☕', descripcion: 'Dos shots de espresso perfectos en una sola taza',                                         precio: 4000, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Cortado',        emoji: '☕', descripcion: 'Espresso equilibrado con una pequeña cantidad de leche caliente',                          precio: 3800, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Café con leche', emoji: '🥛', descripcion: 'Mitad espresso y mitad leche vaporizada',                                                 precio: 4000, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Lágrima',        emoji: '🥛', descripcion: 'Leche caliente con unas gotas de café, suave y delicado',                                 precio: 4000, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Flat White',     emoji: '☕', descripcion: 'Doble shot de espresso con leche al vapor texturizada',                                    precio: 4300, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Americano',      emoji: '☕', descripcion: 'Espresso diluido en agua caliente',                                                        precio: 4000, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Moka',           emoji: '🍫', descripcion: 'Espresso, chocolate y leche vaporizada con espuma',                                       precio: 4000, categoriaId: cafeteria.id, activo: true },
+      { nombre: 'Latte',          emoji: '☕', descripcion: 'Espresso con leche texturizada y almíbar de vainilla o caramelo',                          precio: 4000, categoriaId: cafeteria.id, activo: true },
+    ],
+  });
+
+  // ── Mesas (solo si no existen) ──
+  const mesasExistentes = await prisma.mesa.count();
+  if (mesasExistentes === 0) {
+    console.log('🪑 Creando mesas...');
+    for (let i = 1; i <= 8; i++) {
+      await prisma.mesa.create({ data: { numero: i, label: `Mesa ${i}`, tipo: TipoMesa.MESA, activo: true } });
     }
+    for (let i = 1; i <= 3; i++) {
+      await prisma.mesa.create({ data: { numero: i, label: `Barra ${i}`, tipo: TipoMesa.BARRA, activo: true } });
+    }
+  } else {
+    console.log(`🪑 Ya existen ${mesasExistentes} mesas, se omiten`);
   }
 
-  // ── Items del Catálogo ───────────────────────────────────
-  const items = [
-    // Cafés
-    { nombre: 'Espresso',       emoji: '☕', precio: 800,  categoria: 'Cafés' },
-    { nombre: 'Americano',      emoji: '☕', precio: 900,  categoria: 'Cafés' },
-    { nombre: 'Latte',          emoji: '🥛', precio: 1200, categoria: 'Cafés' },
-    { nombre: 'Cappuccino',     emoji: '☕', precio: 1100, categoria: 'Cafés' },
-    { nombre: 'Cortado',        emoji: '☕', precio: 850,  categoria: 'Cafés' },
-    // Infusiones
-    { nombre: 'Té Verde',       emoji: '🍵', precio: 700,  categoria: 'Infusiones' },
-    { nombre: 'Manzanilla',     emoji: '🌼', precio: 650,  categoria: 'Infusiones' },
-    { nombre: 'Jengibre Limón', emoji: '🍋', precio: 750,  categoria: 'Infusiones' },
-    // Fríos
-    { nombre: 'Frappé',         emoji: '🧋', precio: 1500, categoria: 'Fríos' },
-    { nombre: 'Cold Brew',      emoji: '🧊', precio: 1400, categoria: 'Fríos' },
-    { nombre: 'Limonada',       emoji: '🍋', precio: 1000, categoria: 'Fríos' },
-    // Comidas
-    { nombre: 'Medialunas x3',  emoji: '🥐', precio: 900,  categoria: 'Comidas' },
-    { nombre: 'Tostado Mixto',  emoji: '🥪', precio: 1400, categoria: 'Comidas' },
-    { nombre: 'Avocado Toast',  emoji: '🥑', precio: 1800, categoria: 'Comidas' },
-    // Postres
-    { nombre: 'Brownie',        emoji: '🍫', precio: 1100, categoria: 'Postres' },
-    { nombre: 'Cheesecake',     emoji: '🍰', precio: 1600, categoria: 'Postres' },
-  ];
-
-  for (const item of items) {
-    const existe = await prisma.itemCatalogo.findFirst({
-      where: { nombre: item.nombre, categoriaId: categoriasCreadas[item.categoria] },
+  // ── Usuario admin (si no existe) ──
+  const adminExistente = await prisma.usuario.findUnique({ where: { email: 'admin@drive.com' } });
+  if (!adminExistente) {
+    const hash = await bcrypt.hash('admin@drive.com', 12);
+    await prisma.usuario.create({
+      data: { email: 'admin@drive.com', password: hash, nombre: 'Administrador', rol: Rol.ADMIN, activo: true },
     });
-    if (!existe) {
-      await prisma.itemCatalogo.create({
-        data: {
-          nombre: item.nombre,
-          emoji: item.emoji,
-          precio: item.precio,
-          categoriaId: categoriasCreadas[item.categoria],
-          activo: true,
-        },
-      });
-      console.log(`  ✓ Item: ${item.emoji} ${item.nombre} — $${item.precio}`);
-    } else {
-      console.log(`  ~ Item ya existe: ${item.nombre}`);
-    }
+    console.log('👤 Usuario admin creado: admin@drive.com / admin@drive.com');
+  } else {
+    console.log('👤 Admin ya existe, se omite');
   }
 
-  // ── Mesas ────────────────────────────────────────────────
-  const mesasData = [
-    ...Array.from({ length: 6 }, (_, i) => ({
-      numero: i + 1,
-      label: `Mesa ${i + 1}`,
-      tipo: TipoMesa.MESA,
-    })),
-    ...Array.from({ length: 6 }, (_, i) => ({
-      numero: i + 1,
-      label: `Barra ${i + 1}`,
-      tipo: TipoMesa.BARRA,
-    })),
-  ];
-
-  for (const mesa of mesasData) {
-    const existe = await prisma.mesa.findFirst({
-      where: { numero: mesa.numero, tipo: mesa.tipo },
-    });
-    if (!existe) {
-      await prisma.mesa.create({ data: mesa });
-      console.log(`  ✓ ${mesa.label}`);
-    } else {
-      console.log(`  ~ ${mesa.label} ya existe`);
-    }
-  }
-
-  console.log('');
-  console.log('🎉 Seed completado!');
-  console.log('');
-  console.log('  Admin:  admin@drive.com / admin@drive.com');
-  console.log('  Mozo:   mozo@drive.com  / mozo1234');
+  const totalItems = await prisma.itemCatalogo.count();
+  const totalCats  = await prisma.categoria.count();
+  console.log(`✅ Seed completo: ${totalCats} categorías, ${totalItems} items`);
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Error en seed:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch((e) => { console.error(e); process.exit(1); })
+  .finally(async () => { await prisma.$disconnect(); await pool.end(); });

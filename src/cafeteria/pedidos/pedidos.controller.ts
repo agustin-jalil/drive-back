@@ -13,6 +13,11 @@ export class PedidosController {
     return this.pedidosService.findAll(estado);
   }
 
+  @Get('historial')
+  historialHoy() {
+    return this.pedidosService.findHistorialHoy();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.pedidosService.findOne(id);

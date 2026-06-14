@@ -9,6 +9,12 @@ const FLUJO_ESTADOS: Record<string, EstadoPedido> = {
   LISTO:          'ENTREGADO',
 };
 
+const includeCompleto = {
+  mesa: true,
+  items: { include: { item: true } },
+  usuario: { select: { id: true, nombre: true } },
+} as const;
+
 @Injectable()
 export class PedidosService {
   constructor(private readonly prisma: PrismaService) {}
@@ -18,23 +24,32 @@ export class PedidosService {
       where: {
         ...(estado ? { estado: estado as EstadoPedido } : { estado: { not: 'CERRADO' } }),
       },
-      include: {
-        mesa: true,
-        items: { include: { item: true } },
-        usuario: { select: { id: true, nombre: true } },
-      },
+      include: includeCompleto,
       orderBy: { creadoEn: 'desc' },
+    });
+  }
+
+  // Pedidos CERRADOS del día de hoy
+  findHistorialHoy() {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const maniana = new Date(hoy);
+    maniana.setDate(maniana.getDate() + 1);
+
+    return this.prisma.pedido.findMany({
+      where: {
+        estado: 'CERRADO',
+        cerradoEn: { gte: hoy, lt: maniana },
+      },
+      include: includeCompleto,
+      orderBy: { cerradoEn: 'desc' },
     });
   }
 
   async findOne(id: string) {
     const pedido = await this.prisma.pedido.findUnique({
       where: { id },
-      include: {
-        mesa: true,
-        items: { include: { item: true } },
-        usuario: { select: { id: true, nombre: true } },
-      },
+      include: includeCompleto,
     });
     if (!pedido) throw new NotFoundException('Pedido no encontrado');
     return pedido;
@@ -101,6 +116,7 @@ export class PedidosService {
     return this.prisma.pedido.update({
       where: { id },
       data: { estado: 'CERRADO', cerradoEn: new Date() },
+      include: { mesa: true, items: { include: { item: true } } },
     });
   }
 }
